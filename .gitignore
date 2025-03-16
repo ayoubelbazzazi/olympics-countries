@@ -25,3 +25,7 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
+
+# Run the scraping script
+
+/public/data/*
