@@ -1,0 +1,485 @@
+@use 'sass:list';
+@use 'sass:map';
+
+@font-face {
+    font-family: olympics;
+    src: url('/fonts/olympics.ttf') format('truetype');
+}
+
+* {
+    box-sizing: border-box;
+}
+j * {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.olympic-font {
+    font-family: 'olympics';
+}
+
+$themes: (
+    light: (
+        background: #f9f7f0,
+        color: #000,
+    ),
+    dark: (
+        background: #000324,
+        text-color: #fefefe,
+    ),
+);
+
+@mixin theme-selector($theme-name) {
+    $theme: map.get($themes, $theme-name);
+    background-color: map.get($theme, background);
+    color: map.get($theme, text-color);
+}
+
+@mixin center-elements($justify) {
+    display: flex;
+    justify-content: $justify;
+    align-items: center;
+}
+
+@mixin icon {
+    width: 1em;
+    height: 1em;
+}
+
+@mixin image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#loading {
+    .loading-icon.hide{
+        display: none;
+    }
+    .loading-error{
+        display:none;
+    }
+    .loading-error.show{
+        display:flex;
+    }
+    .error{
+        @include image;
+        background-image:url('/assets/icons/failed.svg');
+    }
+}
+
+body[data-theme='light'] {
+    @include theme-selector(light);
+
+    #loading {
+        @include theme-selector(light);
+
+        .loading-icon{
+            @include image;
+            background-image: url('/assets/icons/loading light.svg');
+            animation:rotate 800ms linear infinite;
+        }
+    }
+
+    #theme-switch {
+        width: 30px;
+        height: 30px;
+        background-image: url('@icons/light.svg');
+
+        @include image;
+    }
+
+    #viz svg {
+        text {
+            fill: black;
+        }
+        line {
+            stroke: black;
+        }
+    }
+
+    #tooltip {
+        @include theme-selector(light);
+        border: #000 solid 1px;
+
+        table {
+            td,
+            th {
+                border: rgba(#000, 0.5) solid 1px;
+            }
+        }
+    }
+
+    #legend {
+        .line {
+            background-color: #000;
+        }
+        .legend-item:nth-of-type(1) {
+            .circle {
+                background-color: rgba(#000, 0.8);
+            }
+        }
+
+        .legend-item:nth-of-type(2) {
+            .circle {
+                background-color: rgba(#000, 0.3);
+            }
+        }
+    }
+
+    $border-colors: #009f3d #df0024 #0085c7 #cd9001 rgb(83, 83, 83);
+    @for $i from 1 through list.length($border-colors) {
+        .country-selector:nth-of-type(#{$i}) {
+            border: list.nth($border-colors, $i) 2px solid;
+
+            .country-list {
+                border: list.nth($border-colors, $i) 2px solid;
+                background-color: #fff;
+                border-top: none;
+
+                .country-item:hover,
+                .country-item.active {
+                    background-color: rgba(#000, 0.2);
+                }
+            }
+
+            .open-selector {
+                background: url('/assets/icons/light down arrow.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+
+            .close-selector {
+                background: url('/assets/icons/light up arrow.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+
+            .delete-selector {
+                background: url('/assets/icons/light delete.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+        }
+        svg #points #points-#{$i} circle {
+            fill: list.nth($border-colors, $i);
+        }
+        svg #lines path#line-#{$i} {
+            stroke: list.nth($border-colors, $i);
+        }
+
+        svg #lines path:hover {
+            stroke-width: 3;
+        }
+    }
+    #add-country {
+        .add-selector {
+            background: url('/assets/icons/light add.svg') center no-repeat;
+            background-size: cover;
+        }
+    }
+    footer {
+        .website {
+            background: url('@icons/website light.svg') center no-repeat;
+            background-size: cover;
+        }
+
+        .linkedin {
+            background: url('@icons/linkedin light.svg') center no-repeat;
+            background-size: cover;
+        }
+    }
+}
+
+body[data-theme='dark'] {
+    @include theme-selector(dark);
+    #loading {
+        @include theme-selector(dark);
+        
+        .loading-icon{
+            @include image;
+            background-image: url('/assets/icons/loading dark.svg');
+            animation:rotate 800ms linear infinite;
+        }
+    }
+    
+
+    #logo {
+        width: 100px;
+        height: auto;
+    }
+
+    #theme-switch {
+        width: 30px;
+        height: 30px;
+        background-image: url('@icons/dark.svg');
+
+        @include image;
+    }
+
+    #viz svg {
+        text {
+            fill: white;
+        }
+        line {
+            stroke: white;
+        }
+    }
+
+    #tooltip {
+        @include theme-selector(dark);
+        border: #fefefe solid 1px;
+
+        table {
+            td,
+            th {
+                border: rgba(#fff, 0.5) solid 1px;
+            }
+        }
+    }
+
+    #legend {
+        .line {
+            background-color: #fefefe;
+        }
+        .legend-item:nth-of-type(1) {
+            .circle {
+                background-color: rgba(#fefefe, 0.8);
+            }
+        }
+
+        .legend-item:nth-of-type(2) {
+            .circle {
+                background-color: rgba(#fefefe, 0.3);
+            }
+        }
+    }
+
+    $border-colors: #4caf50, #5d8aa8, #9e9e9e, #ffc107, #d32f2f;
+    @for $i from 1 through list.length($border-colors) {
+        .country-selector:nth-of-type(#{$i}) {
+            border: list.nth($border-colors, $i) 2px solid;
+
+            .country-list {
+                border: list.nth($border-colors, $i) 2px solid;
+                border-top: none;
+                background-color: #000324;
+
+                .country-item:hover,
+                .country-item.active {
+                    background-color: rgba(#fff, 0.2);
+                }
+            }
+
+            .open-selector {
+                background: url('/assets/icons/dark down arrow.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+
+            .close-selector {
+                background: url('/assets/icons/dark up arrow.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+
+            .delete-selector {
+                background: url('/assets/icons/dark delete.svg')
+                    center
+                    no-repeat;
+                background-size: cover;
+            }
+        }
+        footer {
+            .website {
+                background: url('@icons/website dark.svg') center no-repeat;
+                background-size: cover;
+            }
+
+            .linkedin {
+                background: url('@icons/linkedin dark.svg') center no-repeat;
+                background-size: cover;
+            }
+        }
+        svg #points #points-#{$i} circle {
+            fill: list.nth($border-colors, $i);
+        }
+        svg #lines path#line-#{$i} {
+            stroke: list.nth($border-colors, $i);
+        }
+    }
+
+    #add-country {
+        .add-selector {
+            background: url('/assets/icons/dark add.svg') center no-repeat;
+            background-size: cover;
+        }
+    }
+}
+
+.country-selector {
+    @include center-elements(auto);
+    font-size: 14px;
+    width: 70%;
+    margin-bottom: 1.6em;
+
+    .content {
+        padding: 0.6em 1em;
+        i:nth-of-type(1) {
+            margin-left: auto;
+        }
+
+        span:nth-child(2) {
+            margin-right: auto;
+            margin-left: 1em;
+        }
+        .icon {
+            @include icon;
+        }
+
+        .delete-selector {
+            display: block;
+        }
+    }
+
+    .country-list {
+        display: none;
+    }
+}
+
+.country-selector.hide {
+    .delete-selector {
+        display: none;
+    }
+}
+
+.country-selector.show-country-list {
+    .country-list {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+}
+
+#add-country {
+    @include center-elements(space-between);
+    width: fit-content;
+    span {
+        margin-right: 1em;
+    }
+    .icon {
+        @include icon;
+    }
+}
+
+#add-country.hide {
+    display: none;
+}
+
+#canvas.invert {
+    filter: invert(100%);
+}
+
+svg #lines path.line {
+    stroke-width: 3;
+}
+
+svg #lines path.line:hover {
+    stroke-width: 3;
+}
+
+#tooltip {
+    visibility: hidden;
+    h3 {
+        font-family: 'olympics';
+    }
+
+    th,
+    td {
+        width: 25%;
+    }
+
+    table {
+        table-layout: fixed;
+        i {
+            display: block;
+            width: 10px;
+            height: 10px;
+            @include image;
+        }
+        .gold {
+            background-image: url('/assets/icons/gold.svg');
+        }
+        .silver {
+            background-image: url('/assets/icons/silver.svg');
+        }
+        .bronze {
+            background-image: url('/assets/icons/bronze.svg');
+        }
+    }
+}
+
+#tooltip.show {
+    visibility: visible;
+}
+
+footer {
+    .icon {
+        @include icon;
+    }
+}
+
+#loading.hide {
+    display: none;
+}
+
+@keyframes rotate{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@media (min-width: 1300px) {
+    body {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    body[data-theme='dark'] {
+        #content {
+            padding: 1em;
+            border: 2px solid #fefefe;
+        }
+    }
+
+    body[data-theme='light'] {
+        #content {
+            padding: 1em;
+            border: 2px solid #000;
+        }
+    }
+}

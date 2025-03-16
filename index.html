@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/assets/icons/gold.svg">
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/style.scss" />
+        <title>Viz</title>
+    </head>
+    <body class="w-fit min-h-screen backgroundcolor py-6" data-theme="light">
+        <div id="loading" class="fixed w-screen h-screen left-0 top-0 z-50 flex items-center justify-center">
+            <div
+                class="loading-icon w-[50px] h-[50px] "
+            /></div>
+            <div class="loading-error flex flex-col items-center">
+                <div class="error w-[30px] h-[30px]"></div>
+                <p>Failed to load data. Please retry later</p>
+            </div>
+        </div>
+        <div id="content">
+            <header class="mb-16 px-10 flex justify-between items-center">
+                <img id="logo" src="/assets/icons/logo light.svg" alt="" />
+                <button
+                    id="theme-switch"
+                    class="outline-none cursor-pointer"
+                ></button>
+            </header>
+            <main class="mb-10">
+                <div
+                    id="dashboard"
+                    class="w-[1200px] h-[650px] foregroundcolor grid gap-4 grid-cols-[repeat(4,_1fr)] px-10"
+                >
+                    <div
+                        id="config"
+                        class="px-2 py-6 col-start-1 col-span-1 flex flex-col"
+                    >
+                        <h2 class="olympic-font text-[1.3em] mb-6 leading-9">Top countries by Olympic medal wins, 1896 to 2024</h2>
+                        <div id="country-selection-container">
+                            <div id="country-selectors" class="mb-6">
+                                <div
+                                    class="country-selector relative cursor-pointer"
+                                    data-enable-hide="false"
+                                    data-element-number="0"
+                                >
+                                    <div
+                                        class="content w-full flex items-center"
+                                        data-enable-hide="false"
+                                    >
+                                        <span data-enable-hide="false"
+                                            >Select a country</span
+                                        >
+                                        <i
+                                            class="icon open-selector text-[9px]"
+                                            data-enable-hide="false"
+                                        ></i>
+                                        <i
+                                            class="icon delete-selector absolute cursor-pointer -right-9 text-[19px]"
+                                            data-enable-hide="false"
+                                        ></i>
+                                    </div>
+                                    <div
+                                        class="country-list absolute -left-[2px] top-[calc(100%+2px)] w-[calc(100%+4px)] h-[200px] flex flex-col z-50 overflow-y-scroll"
+                                        data-enable-hide="false"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div id="add-country">
+                                <i
+                                    class="icon mr-2 add-selector cursor-pointer text-[19px]"
+                                ></i>
+                                <span>Add</span>
+                            </div>
+                        </div>
+                        <div id="legend" class="mt-auto text-sm">
+                            <div class="legend-item flex items-center gap-2">
+                                <div
+                                    class="circle w-[8px] h-[8px] rounded-full"
+                                ></div>
+                                <div class="line h-[1px] w-[50px]"></div>
+                                <div class="label">Medal-winning country</div>
+                            </div>
+                            <div class="legend-item flex items-center gap-2">
+                                <div
+                                    class="circle w-[8px] h-[8px] rounded-full"
+                                ></div>
+                                <div class="line h-[1px] w-[50px]"></div>
+                                <div class="label">No data</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        id="viz"
+                        class="col-start-2 col-span-3 ml-[4em] relative"
+                    >
+                        <div
+                            id="tooltip"
+                            class="absolute left-0 top-0 text-[11px] p-2"
+                        >
+                            <div
+                                class="heading flex justify-between gap-6 mb-4"
+                            >
+                                <div class="details flex flex-col">
+                                    <h3 class="text-sm mb-2">Russia</h3>
+                                    <span>Rank: 13</span>
+                                    <span>Olympics: Summer 2024</span>
+                                    <span>Location: Beijing-China</span>
+                                </div>
+                                <img
+                                    src="/assets/flags/187-Russia.png"
+                                    class="w-[55px] h-fit"
+                                    alt="Russian flag"
+                                />
+                            </div>
+
+                            <div class="medals flex flex-col">
+                                <h4 class="mb-2">Medals:</h4>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="">
+                                                <div
+                                                    class="flex items-center justify-center"
+                                                >
+                                                    <i class="gold"></i>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div
+                                                    class="flex items-center justify-center"
+                                                >
+                                                    <i class="px-1 silver"></i>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div
+                                                    class="flex items-center justify-center"
+                                                >
+                                                    <i class="px-1 bronze"></i>
+                                                </div>
+                                            </th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center p-1">10</td>
+                                            <td class="text-center">10</td>
+                                            <td class="text-center">10</td>
+                                            <td class="text-center">10</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <canvas
+                            id="canvas"
+                            class="absolute left-0 top-0 w-full h-full -z-10"
+                        ></canvas>
+                    </div>
+                </div>
+            </main>
+            <footer class="px-10 flex items-center text-sm">
+                <a
+                    target="_blank"
+                    href="https://ayoubelbazzazi.com"
+                    class="icon website mr-3 text-[14px]"
+                >
+                </a>
+                <a
+                    target="_blank"
+                    href="https://www.linkedin.com/in/ayoub-el-bazzazi-6084b2260/"
+                    class="text-[12px] icon linkedin"
+                ></a>
+                <span class="ml-auto mr-12">Created by Ayoub El Bazzazi</span>
+                <a
+                    target="_blank"
+                    href="https://github.com/ayoubelbazzazi/olympic_medals"
+                    >Data source</a
+                >
+            </footer>
+        </div>
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>
